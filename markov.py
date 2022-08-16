@@ -59,22 +59,25 @@ def make_chains(text_string):
 def make_text(chains):
     """Return text from chains."""
 
-    words = []
+    current_key = choice(list(chains.keys()))
+    words = [current_key[0], current_key[1]]
 
-    # your code goes here
+    while current_key in chains:
+        next_word = choice(chains[current_key])
+        words.append(next_word)
+        current_key = (current_key[1], next_word)
 
     return ' '.join(words)
 
 
 input_path = sys.argv[1]
-print(make_chains(open_and_read_file(input_path)))
 # Open the file and turn it into one long string
-# input_text = open_and_read_file(input_path)
+input_text = open_and_read_file(input_path)
 
 # Get a Markov chain
-# chains = make_chains(input_text)
+chains = make_chains(input_text)
 
 # Produce random text
-# random_text = make_text(chains)
+random_text = make_text(chains)
 
-# print(random_text)
+print(random_text)
