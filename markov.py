@@ -3,6 +3,7 @@
 from random import choice
 import sys
 
+n = int(sys.argv[2])
 
 def open_and_read_file(file_path):
     """Take file path as string; return text as string.
@@ -44,14 +45,27 @@ def make_chains(text_string):
 
     chains = {}
 
-    for i in range(len(words)-2):
-        key = (words[i], words[i + 1])
-        value = words[i + 2]
+    for index in range(len(words)- n):
+        key = tuple(words[index:index + n])
+        value = words[index + n]
 
         if key not in chains:
             chains[key] = [value]
         else:
             chains[key].append(value)
+
+
+        #    key = tuple(words[index:index+n])
+        #    value = words[i + n]
+
+    # for i in range(len(words)-2):
+    #     key = (words[i], words[i + 1])
+    #     value = words[i + 2]
+
+    #     if key not in chains:
+    #         chains[key] = [value]
+    #     else:
+    #         chains[key].append(value)
 
     return chains
 
@@ -59,13 +73,18 @@ def make_chains(text_string):
 def make_text(chains):
     """Return text from chains."""
 
-    current_key = choice(list(chains.keys()))
-    words = [current_key[0], current_key[1]]
+    upper_keys = []
+    for key in chains:
+        if key[0][0].isupper():
+            upper_keys.append(key)
+    current_key = choice(upper_keys)
+    words = [current_key[i] for i in range(n)]   
 
     while current_key in chains:
         next_word = choice(chains[current_key])
         words.append(next_word)
-        current_key = (current_key[1], next_word)
+        current_key = current_key[1:] + (next_word,)
+
 
     return ' '.join(words)
 
